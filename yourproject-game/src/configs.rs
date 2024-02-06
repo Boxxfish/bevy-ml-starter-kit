@@ -2,7 +2,7 @@
 
 use std::time::Duration;
 
-use bevy::{prelude::*, time::TimeUpdateStrategy};
+use bevy::{input::InputPlugin, prelude::*, scene::ScenePlugin, time::TimeUpdateStrategy};
 
 use crate::cartpole::{CartpolePlayPlugin, CartpolePlugin};
 
@@ -45,9 +45,17 @@ pub struct LibCfgPlugin;
 
 impl Plugin for LibCfgPlugin {
     fn build(&self, app: &mut App) {
-        app.add_plugins((MinimalPlugins, CoreGamePlugin))
-            .insert_resource(TimeUpdateStrategy::ManualDuration(Duration::from_secs_f32(
-                0.02,
-            ))); // Use constant timestep
+        app.add_plugins((
+            MinimalPlugins,
+            TransformPlugin,
+            HierarchyPlugin,
+            InputPlugin,
+            AssetPlugin::default(),
+            ScenePlugin,
+            CoreGamePlugin,
+        ))
+        .insert_resource(TimeUpdateStrategy::ManualDuration(Duration::from_secs_f32(
+            0.02,
+        ))); // Use constant timestep
     }
 }

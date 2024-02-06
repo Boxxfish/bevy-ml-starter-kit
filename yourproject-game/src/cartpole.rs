@@ -1,15 +1,14 @@
 use bevy::prelude::*;
 use rand::prelude::*;
 
-const GRAVITY: f32 = 9.8;
-const MASS_CART: f32 = 1.0;
-const MASS_POLE: f32 = 0.1;
-const TOTAL_MASS: f32 = MASS_CART + MASS_POLE;
-const LENGTH: f32 = 0.5;
-const POLE_MASS_LENGTH: f32 = MASS_POLE * LENGTH;
-const FORCE_MAG: f32 = 10.0;
-const THETA_THRESHOLD_RADIANS: f32 = 12.0 * 2.0 * std::f32::consts::PI / 360.0;
-const X_THRESHOLD: f32 = 2.4;
+pub const GRAVITY: f32 = 9.8;
+pub const MASS_CART: f32 = 1.0;
+pub const MASS_POLE: f32 = 0.1;
+pub const TOTAL_MASS: f32 = MASS_CART + MASS_POLE;
+pub const LENGTH: f32 = 0.5;
+pub const POLE_MASS_LENGTH: f32 = MASS_POLE * LENGTH;
+pub const FORCE_MAG: f32 = 10.0;
+
 /// Simulates a cart balancing a pole.
 /// Based on the OpenAI gym implementation.
 pub struct CartpolePlugin;
@@ -129,9 +128,6 @@ fn run_sim(mut cart_state: ResMut<CartpoleState>, next_act: Res<NextAction>, tim
         pole_angle: theta,
         pole_angvel: theta_dot,
     };
-    let terminated = !(-X_THRESHOLD..=X_THRESHOLD).contains(&x)
-        || !(-THETA_THRESHOLD_RADIANS..=THETA_THRESHOLD_RADIANS).contains(&theta);
-    let reward = 1.0;
 }
 
 /// Updates the visuals in the simulation.
@@ -149,7 +145,7 @@ fn update_visuals(
 
 /// Contains the next action that should be performed in the sim.
 #[derive(Resource)]
-pub struct NextAction(u32);
+pub struct NextAction(pub u32);
 
 /// Updates the next action by pressing left or right.
 fn update_action(mut next_act: ResMut<NextAction>, inpt: Res<Input<KeyCode>>) {
