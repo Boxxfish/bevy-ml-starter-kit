@@ -1,15 +1,21 @@
 //! Defines various configurations our game can be in.
 
-use bevy::prelude::*;
+use std::time::Duration;
 
-/// Handles core functionality for our game (e.g. gameplay logic).
+use bevy::{prelude::*, time::TimeUpdateStrategy};
+
+use crate::cartpole::{CartpolePlayPlugin, CartpolePlugin};
+
+/// Handles core functionality for our game (i.e. gameplay logic).
 pub struct CoreGamePlugin;
 
 impl Plugin for CoreGamePlugin {
-    fn build(&self, _app: &mut App) {}
+    fn build(&self, app: &mut App) {
+        app.add_plugins(CartpolePlugin);
+    }
 }
 
-/// Adds functionality required to make the game playable.
+/// Adds functionality required to make the game playable (e.g. graphics and input handling).
 pub struct PlayablePlugin;
 
 impl Plugin for PlayablePlugin {
@@ -20,7 +26,8 @@ impl Plugin for PlayablePlugin {
                 ..default()
             }),
             ..default()
-        }));
+        }))
+        .add_plugins(CartpolePlayPlugin);
     }
 }
 
@@ -38,6 +45,9 @@ pub struct LibCfgPlugin;
 
 impl Plugin for LibCfgPlugin {
     fn build(&self, app: &mut App) {
-        app.add_plugins(CoreGamePlugin);
+        app.add_plugins((MinimalPlugins, CoreGamePlugin))
+            .insert_resource(TimeUpdateStrategy::ManualDuration(Duration::from_secs_f32(
+                0.02,
+            ))); // Use constant timestep
     }
 }
