@@ -3,7 +3,7 @@ Experiment for checking that Rust env works.
 This should be removed if the Rust environment changes.
 """
 from functools import reduce
-from typing import Any, Dict, Tuple
+from typing import Any
 
 import gymnasium
 import torch
@@ -18,12 +18,12 @@ from yourproject.algorithms.ppo import train_ppo
 from yourproject.algorithms.rollout_buffer import RolloutBuffer
 from yourproject.conf import entity
 from yourproject.utils import init_orthogonal
-from yourproject_ml_rust import CartpoleEnv  # type: ignore
+from yourproject_rust import CartpoleEnv  # type: ignore
 
 _: Any
 
 # Hyperparameters
-num_envs = 256  # Number of environments to step through at once during sampling.
+num_envs = 64  # Number of environments to step through at once during sampling.
 train_steps = 128  # Number of steps to step through during sampling. Total # of samples is train_steps * num_envs/
 iterations = 1000  # Number of sample/train iterations.
 train_iters = 2  # Number of passes over the samples collected.
@@ -213,3 +213,5 @@ for _ in tqdm(range(iterations), position=0):
             "avg_p_loss": total_p_loss / train_iters,
         }
     )
+
+    

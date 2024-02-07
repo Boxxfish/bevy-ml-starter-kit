@@ -22,7 +22,7 @@ impl CartpoleEnv {
     #[new]
     pub fn new() -> CartpoleEnv {
         let mut app = App::new();
-        app.add_plugins((LibCfgPlugin, LogPlugin::default()));
+        app.add_plugins(LibCfgPlugin);
 
         app.finish();
         app.cleanup();
